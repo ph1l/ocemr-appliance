@@ -1,0 +1,15 @@
+bundle agent init
+{
+
+methods:
+                "any" usebundle => init_cleanup();
+}
+
+bundle agent init_cleanup
+{
+files:
+		"$(sys.workdir)/outputs"
+			delete => tidy,
+			file_select => days_old("3"),
+			depth_search => recurse("inf");
+}
