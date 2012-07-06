@@ -57,14 +57,26 @@ classes:
 		"package_dnsmasq" expression => fileexists(
 			"/usr/sbin/dnsmasq");
 
+		"package_watch4inet" expression => fileexists(
+			"/usr/sbin/watch4inet");
+
 packages:
 	am_gateway::
 		"dnsmasq"
 			package_policy => "addupdate",
 			package_method => generic;
 
+		"watch4inet"
+			package_policy => "addupdate",
+			package_method => generic;
+
 	package_dnsmasq.!am_gateway::
 		"dnsmasq"
+			package_policy => "delete",
+			package_method => generic;
+
+	package_watch4inet.!am_gateway::
+		"watch4inet"
 			package_policy => "delete",
 			package_method => generic;
 			
