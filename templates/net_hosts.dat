@@ -1,9 +1,9 @@
 [%CFEngine BEGIN %]
 127.0.0.1	localhost
-$(base_config.net_addr)	$(base_config.net_hostname).$(base_config.net_domain) $(base_config.net_hostname)
+$(config.base_net_addr)	$(config.base_net_hostname).$(config.base_net_domain) $(config.base_net_hostname)
 
 # additional entries:
-$(base_config.net_addr) ocemr
+$(config.base_net_addr) ocemr
 
 # The following lines are desirable for IPv6 capable hosts
 ::1     ip6-localhost ip6-loopback

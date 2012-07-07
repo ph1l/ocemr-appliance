@@ -11,3 +11,9 @@ Architecture: all
 Depends: ${misc:Depends}, cfengine3
 Description: OCEMR Appliance Automation Package.
  This package installs cfengine policy to maintain an OCEMR appliance server.
+
+Package: ocemr-appd
+Architecture: all
+Depends: ${misc:Depends}, ocemr-appliance, python-flask
+Description: OCEMR Appliance Automation Configuration Package.
+ This package installs a configuration daemon for an OCEMR appliance server.

@@ -1,0 +1,251 @@
+#!/usr/bin/python
+# vi:tabstop=4:expandtab
+
+import os,sys,shutil
+from flask import Flask, redirect, url_for, render_template_string, request, flash
+
+CONF_DIR="/etc/ocemr-appliance"
+
+app = Flask(__name__)
+
+
+def read_config_file( fname ):
+    r = {}
+    f = open(fname)
+    for line in f.readlines():
+        line=line[:-1]
+        s = line.split("=",1)
+        if len(s) > 1:
+            #sys.stderr.write("%s %s"%( s[1], s[2] ))
+            r[s[0]]=s[1]
+    return r
+
+def get_sections():
+    sections=[]
+    for f in os.listdir(CONF_DIR):
+        if f[-5:] == ".conf":
+            sections.append(f[:-5])
+    return sections
+    
+def load_runnig_config():
+    
+    config={}
+    for f in os.listdir(CONF_DIR):
+        if f[-5:] == ".conf":
+            section = f[:-5]
+            if not config.has_key(section):
+                config[section]={}
+            config[section] = read_config_file("%s/%s"%(CONF_DIR,f))
+    return config
+
+def load_staged_config():
+    
+    config={}
+    for f in os.listdir(CONF_DIR):
+        if f[-7:] == ".conf.s":
+            section = f[:-7]
+            if not config.has_key(section):
+                config[section]={}
+            config[section] = read_config_file("%s/%s"%(CONF_DIR,f))
+    return config
+
+def set_config_item(section,name,value):
+    config=load_staged_config()
+    config[section][name] = value
+
+    f = open("%s/%s.conf.s"%(CONF_DIR,section), "wb")
+    for name in config[section].keys():
+        f.write("%s=%s\n"%(name,config[section][name]))
+    f.close()
+
+@app.route("/")
+def index():
+    TEMPLATE="""
+<HTML>
+<HEAD>
+<TITLE>OCEMR: Appliance Config</TITLE>
+<LINK REL="stylesheet" type="text/css" href="/style.css" />
+<script type="text/javascript">
+function newPopup(url) {
+    popupWindow = window.open(
+        url,'popUpWindow','height=400,width=600,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
+}
+</script>
+</HEAD>
+<BODY>
+<H1>OCEMR: Appliance Config</H1>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+<TABLE>
+<TR><TH>Section<TH>Name<TH>Current Value<TH>Staged<TH>
+{% for s in section %}
+<TR><TH>{{ s }}<TH><TH><TH>
+{% for k in config_keys[s] %}
+<TR{% if running_config[s][k] != staged_config[s][k] %} CLASS=changed {% endif %}>
+<TD>
+<TD>{{ k }}
+<TD>"{{ running_config[s][k] }}"
+<TD>"{{ staged_config[s][k] }}"
+<TD><A HREF="JavaScript:newPopup('/edit/{{ s }}/{{ k }}');">edit</a>
+{% endfor %}
+{% endfor %}
+</TABLE>
+<A HREF=/unstage_config>Cancel Staged Changes</A> or <A HREF=/commit_config>Commit Staged Changes</A>
+</BODY>
+</HTML>
+
+"""
+    running_config=load_runnig_config()
+    staged_config=load_staged_config()
+    section=running_config.keys()
+    section.sort()
+    config_keys={}
+    for s in section:
+        config_keys[s]=running_config[s].keys()
+        config_keys[s].sort()
+
+    return render_template_string(TEMPLATE,
+            section=section,
+            config_keys=config_keys,
+            running_config=running_config,
+            staged_config=staged_config
+        )
+
+@app.route("/edit/<section>/<name>", methods=['GET', 'POST'])
+def edit( section, name ):
+    TEMPLATE="""
+<HTML>
+<HEAD>
+<TITLE>OCEMR: Appliance Config</TITLE>
+<LINK REL="stylesheet" type="text/css" href="/style.css" />
+</HEAD>
+<BODY>
+<H2>Edit: {{ section }}/{{ name }}</H2>
+<FORM ACTION=/edit/{{ section }}/{{ name }} METHOD=POST>
+<INPUT TYPE=TEXT NAME="value" VALUE="{{ default_value }}">
+<INPUT TYPE=SUBMIT>
+</FORM>
+</BODY>
+</HTML>
+"""
+    
+    staged_config=load_staged_config()
+
+    if request.method == 'POST':
+        value = request.form['value']
+        flash("Setting %s / %s == \"%s\""%(section,name,value))
+        set_config_item(section,name,value)
+        return """<HTML><HEAD><script type="text/javascript">opener.location.reload(true);self.close();</script></HEAD></HTML>"""
+    else:
+        return render_template_string(TEMPLATE,
+                section=section,
+                name=name,
+                default_value=staged_config[section][name],
+            )
+
+@app.route("/unstage_config")
+def unstage_config():
+    for s in get_sections():
+        shutil.copy(
+                "%s/%s.conf"%(CONF_DIR,s),
+                "%s/%s.conf.s"%(CONF_DIR,s),
+            )
+    flash("Staged Changes Canceled...")
+    return redirect(url_for('index'))
+
+@app.route("/commit_config")
+def commit_config():
+    for s in get_sections():
+        shutil.copy(
+            "%s/%s.conf.s"%(CONF_DIR,s),
+            "%s/%s.conf"%(CONF_DIR,s),
+        )
+    flash("Staged Changes Committed...")
+    return redirect(url_for('index'))
+
+@app.route("/style.css", methods=['GET'])
+def style():
+    """
+    /style.css
+
+    css style sheet
+
+    """
+    TEMPLATE = """
+body {
+    background-color:#444444;
+    color: #F8F8F8;
+    font-family: "Lucida Console", Lucida, monospace;
+}
+a:link{
+    color: #AA99FF;
+    text-decoration: none;
+}
+a:visited{
+    color: #AA99FF;
+    text-decoration: none;
+}
+a:hover{
+    color: #EEDDFF;
+    text-decoration: none;
+}
+a:active{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+h1 {
+    font-size: 2em;
+    color:#999999;
+}
+h2 {
+    font-size: 1.67em;
+    color:#999999;
+}
+h3 {
+    font-size: 1.33em;
+    color:#999999;
+}
+h4 {
+    font-size: 1.21em;
+    color:#999999;
+}
+h5 {
+    font-size: 1.11em;
+    color:#999999;
+}
+h6 {
+    font-size: 1.06em;
+    color:#999999;
+}
+p.footer {
+    font-size: .67em;
+    color:#999999;
+}
+table {
+    background-color:#666666;
+    border-collapse:collapse;
+}
+td, th {
+    padding: 3px;
+}
+table, th, td {
+    border: 1px solid black;
+}
+tr.changed {
+    background-color:#880000;
+}
+"""
+    return render_template_string(TEMPLATE)
+
+if __name__ == "__main__":
+    app.debug = True
+    app.secret_key = os.urandom(24)
+    app.run(host='0.0.0.0')
+

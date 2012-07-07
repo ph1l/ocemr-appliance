@@ -1,20 +1,11 @@
-bundle common ocemr_config
+bundle agent ocemr
 {
- vars:
-	"db_name" string => "ocemr";
-	"db_user" string => "ocemr";
-	"db_host" string => "localhost";
-	"db_pass" string => "rmeco";
-	"admin_name" string => "Administrator";
-	"admin_email" string => "admin@$(base_config.net_domain)";
-	"timezone" string => "Etc/UTC";
-	"secret_key" string => "5!&)hu8!_=l-*y2gwm9z9z&qro+m7%wswqpzk1)hlt_nxi)k_x";
-	"ocemr_superuser" string => "admin";
-	"ocemr_superuser_email" string => "ocemr@ocemr.$(base_config.net_domain)";
-	"ocemr_superuser_password" string => "";
+
+methods:
+                "any" usebundle => ocemr_ocemr();
 }
 
-bundle agent ocemr
+bundle agent ocemr_ocemr
 {
 
 classes:
@@ -30,7 +21,7 @@ classes:
 	mysql_server_installed::
 		"ocemr_database_checked" expression => "any";
 		"ocemr_database_exists" expression =>
-			fileexists("/var/lib/mysql/$(ocemr_config.db_name)");
+			fileexists("/var/lib/mysql/$(config.ocemr_db_name)");
 
 packages:
 
@@ -71,10 +62,10 @@ commands:
 
 	mysql_server_installed.ocemr_installed.ocemr_database_checked.!ocemr_database_exists::
 
-		"/usr/bin/mysqladmin -uroot create $(ocemr_config.db_name)"
+		"/usr/bin/mysqladmin -uroot create $(config.ocemr_db_name)"
 			contain => in_shell;
 
-		"/bin/echo \"GRANT ALL ON $(ocemr_config.db_name).* TO $(ocemr_config.db_user)@$(ocemr_config.db_host) IDENTIFIED BY \\\"$(ocemr_config.db_pass)\\\";\" | /usr/bin/mysql -uroot"
+		"/bin/echo \"GRANT ALL ON $(config.ocemr_db_name).* TO $(config.ocemr_db_user)@$(config.ocemr_db_host) IDENTIFIED BY \\\"$(config.ocemr_db_pass)\\\";\" | /usr/bin/mysql -uroot"
 			contain => in_shell;
 
 		"/usr/bin/mysqladmin -uroot reload"

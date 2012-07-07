@@ -2,12 +2,12 @@
 auto lo
 iface lo inet loopback
 
-auto $(base_config.net_dev)
-iface $(base_config.net_dev) inet static
-	address	$(base_config.net_addr)
-	netmask $(base_config.net_mask)
+auto $(config.base_net_dev)
+iface $(config.base_net_dev) inet static
+	address	$(config.base_net_addr)
+	netmask $(config.base_net_mask)
 [%CFEngine END %]
 [%CFEngine am_gateway:: %]
 	pre-up /sbin/iptables-restore /etc/network/firewall
 [%CFEngine !am_gateway:: %]
-	gateway $(base_config.net_gateway)
+	gateway $(config.base_net_gateway)

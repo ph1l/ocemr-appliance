@@ -1,0 +1,3 @@
+var/cfengine/masterfiles/*
+/etc/ocemr-appliance/*
+
