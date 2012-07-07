@@ -122,9 +122,19 @@ commands:
 }
 bundle agent base_cups
 {
+vars:
+		"additional_printing_packages" slist => {
+				"foomatic-db", "foomatic-db-engine",
+				"foomatic-filters", "foo2zjs", "hplip",
+				"hplip-cups" };
 classes:
 		"package_cups" expression => fileexists(
 			"/usr/sbin/cupsd");
+packages:
+	package_cups::
+		"$(additional_printing_packages)"
+			package_policy => "add",
+			package_method => generic;
 
 methods:
 		"any" usebundle => update_package("cups");
