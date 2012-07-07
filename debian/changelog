@@ -1,3 +1,19 @@
+ocemr-appliance (1.1) stable; urgency=low
+
+  * manage watch4inet package
+  * Add a readme
+  * setup ocemr as default site on appliance
+  * update default user with insane defaults
+  * move configuration to webapp
+  * set default printer to null
+  * add staged config files
+  * set config values ia web
+  * highlight staged changes in red!
+  * add init script and chmod configs in postinst
+  * reset the hostname after we modify etc/hostname
+
+ -- Philip J Freeman <philip.freeman@gmail.com>  Sat, 07 Jul 2012 02:09:21 -0500
+
 ocemr-appliance (1.0) stable; urgency=low
 
   * Initial Release.
