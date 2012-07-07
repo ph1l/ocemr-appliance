@@ -36,6 +36,8 @@ install: $(addprefix promises/,$(POLICY_FILES))
 	install --owner=root --group=root --mode=755 \
 	  promises/modules/* $(DESTDIR)$(POLICY_DIR)/modules
 	
+	date > $(DESTDIR)$(POLICY_DIR)/cf_promises_validated
+	
 	if [ ! -d $(DESTDIR)/usr/sbin ]; then \
 	  mkdir -p $(DESTDIR)/usr/sbin; \
 	  fi
