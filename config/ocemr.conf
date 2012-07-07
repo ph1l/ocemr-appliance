@@ -6,4 +6,4 @@ db_pass=rmeco
 admin_name=Administrator
 admin_email=admin@localhost
 printer=
-printer=Letter
+papersize=Letter
