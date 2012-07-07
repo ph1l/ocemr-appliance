@@ -1,12 +1,23 @@
 [%CFEngine BEGIN %]
 <VirtualHost *:80>
-	ServerName ocemr.$(base_config.net_domain)
 	ServerAdmin webmaster@mysite.com
 
-	ErrorLog /var/log/apache2/ocemr/error.log
-	CustomLog /var/log/apache2/ocemr/access.log combined
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	LogLevel error
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
 
 	DocumentRoot /usr/share/ocemr/www
+
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /var/www/>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
 
 	<Location />
 		SetHandler python-program

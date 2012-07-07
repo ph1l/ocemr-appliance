@@ -53,9 +53,9 @@ methods:
 			"/etc/ocemr/util_conf.py", "ocemr_util_conf_py" );
 
 		"any" usebundle => insert_template(
-			"/etc/ocemr/apache2.conf", "ocemr_apache2_conf" );
+			"/etc/apache2/sites-available/default", "apache2_default" );
 
-	ocemr__etc_apache2_sites_enabled_ocemr_repaired::
+	ocemr__etc_apache2_sites_available_default_repaired::
 
 		"any" usebundle => service("apache2", "force-reload");
 
@@ -66,14 +66,6 @@ methods:
 	ocemr_mysqld_not_running::
 
 		"any" usebundle => service("mysql", "start");
-
-files:
-
-	ocemr_installed::
-
-		"/etc/apache2/sites-enabled/ocemr"
-			link_from => ln_s("/etc/apache2/sites-available/ocemr"),
-			classes => if_repaired("ocemr__etc_apache2_sites_enabled_ocemr_repaired");
 
 commands:
 
