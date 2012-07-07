@@ -95,6 +95,10 @@ methods:
 		"any" usebundle => insert_template(
 			"/etc/dnsmasq.conf", "net_dnsmasq_conf");
 
+	insert_template__etc_hostname_repaired::
+
+		"any" usebundle => service("hostname.sh", "start");
+
 	insert_template__etc_network_interfaces_repaired|insert_template__etc_network_firewall_repaired::
 
 		"any" usebundle => restart_interface("$(config.base_net_dev)");
