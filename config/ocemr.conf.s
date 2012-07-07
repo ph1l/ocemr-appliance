@@ -5,5 +5,5 @@ db_host=localhost
 db_pass=rmeco
 admin_name=Administrator
 admin_email=admin@localhost
-printer=printer_name
+printer=
 printer=Letter
