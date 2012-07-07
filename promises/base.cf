@@ -2,11 +2,19 @@ bundle agent base
 {
 
 methods:
+		"any" usebundle => base_global();
 		"any" usebundle => base_cfengine3();
 		"any" usebundle => base_networking();
 		"any" usebundle => base_apt();
 		"any" usebundle => base_cups();
 
+}
+
+bundle common base_global
+{
+classes:
+		"am_gateway"
+			expression => strcmp("$(config.base_net_gateway)","");
 }
 
 bundle agent base_cfengine3
@@ -28,8 +36,6 @@ methods:
 bundle agent base_networking
 {
 classes:
-		"am_gateway"
-			expression => strcmp("$(config.base_net_gateway)","");
 		"package_dnsmasq" expression => fileexists(
 			"/usr/sbin/dnsmasq");
 
