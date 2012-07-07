@@ -81,10 +81,9 @@ commands:
 			contain => in_shell;
 
 		"/usr/bin/python /usr/share/ocemr/apps/ocemr/manage.py syncdb --noinput"
-			contain => setuid_sh("www-data");
-
+			contain => in_shell;
 		"/usr/bin/python /usr/share/ocemr/apps/ocemr/manage.py loaddata $(sys.workdir)/inputs/data/default_user.json"
-			contain => setuid_sh("www-data");
+			contain => in_shell;
 
 processes:
 	apache2_installed::
