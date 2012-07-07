@@ -23,17 +23,11 @@ classes:
 		"ocemr_database_exists" expression =>
 			fileexists("/var/lib/mysql/$(config.ocemr_db_name)");
 
-packages:
-
-		"mysql-server"
-			package_policy => "addupdate",
-			package_method => generic;
-
-		"ocemr"
-			package_policy => "addupdate",
-			package_method => generic;
-
 methods:
+
+		"any" usebundle => update_package("mysql-server");
+
+		"any" usebundle => update_package("ocemr");
 
 	ocemr_installed::
 

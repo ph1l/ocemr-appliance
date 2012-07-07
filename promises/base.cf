@@ -11,17 +11,10 @@ methods:
 
 bundle agent base_cfengine3
 {
-packages:
-
-		"cfengine3"
-			package_policy => "update",
-			package_method => generic;
-
-		"ocemr-appliance"
-			package_policy => "update",
-			package_method => generic;
-
 methods:
+		"any" usebundle => update_package("cfengine3");
+		"any" usebundle => update_package("ocemr-appliance");
+		"any" usebundle => update_package("ocemr-appd");
 
 		"any" usebundle => insert_template(
 			"/etc/default/cfengine3", "cfengine3_default");
@@ -44,15 +37,6 @@ classes:
 			"/usr/sbin/watch4inet");
 
 packages:
-	am_gateway::
-		"dnsmasq"
-			package_policy => "addupdate",
-			package_method => generic;
-
-		"watch4inet"
-			package_policy => "addupdate",
-			package_method => generic;
-
 	package_dnsmasq.!am_gateway::
 		"dnsmasq"
 			package_policy => "delete",
@@ -84,6 +68,8 @@ methods:
 		"any" usebundle => insert_template(
 			"/etc/resolv.conf", "net_resolv_conf");
 	am_gateway::
+		"any" usebundle => update_package("dnsmasq");
+		"any" usebundle => update_package("watch4inet");
 		"any" usebundle => insert_template(
 			"/etc/network/firewall", "net_firewall" );
 
@@ -125,12 +111,8 @@ classes:
 		"package_kremlor_archive_keyring" expression => fileexists(
 			"/usr/share/keyrings/kremlor-archive-keyring.gpg");
 
-packages:
-		"kremlor-archive-keyring"
-			package_policy => "update",
-			package_method => generic;
-
 methods:
+		"any" usebundle => update_package("kremlor-archive-keyring");
 		"any" usebundle => insert_template(
 			"/etc/apt/sources.list", "apt_sources.list");
 commands:
@@ -144,11 +126,9 @@ classes:
 		"package_cups" expression => fileexists(
 			"/usr/sbin/cupsd");
 
-packages:
-		"cups"
-			package_policy => "addupdate",
-			package_method => generic;
 methods:
+		"any" usebundle => update_package("cups");
+		
 	package_cups::
 		"any" usebundle => insert_template(
 			"/etc/cups/cupsd.conf", "cups_cupsd_conf");
