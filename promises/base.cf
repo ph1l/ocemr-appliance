@@ -128,6 +128,10 @@ vars:
 				"foomatic-filters", "foo2zjs", "hplip",
 				"hplip-cups" };
 classes:
+		"ocemr_in_lpadmin" expression => returnszero(
+			"/bin/cat /etc/group | grep ^lpadmin | grep ocemr",
+			"useshell");
+
 		"package_cups" expression => fileexists(
 			"/usr/sbin/cupsd");
 packages:
@@ -153,4 +157,7 @@ processes:
 	package_cups::
 		"/usr/sbin/cupsd"
 			restart_class => "cupsd_not_running";
+commands:
+	!ocemr_in_lpadmin::
+		"/usr/sbin/adduser ocemr lpadmin";
 }
