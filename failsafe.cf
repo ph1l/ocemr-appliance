@@ -102,6 +102,7 @@ body copy_from u_cp_nobck(from)
  compare     => "digest";
  copy_backup => "false";
  purge       => "true";
+ preserve    => "true";
 }
 
 #########################################################

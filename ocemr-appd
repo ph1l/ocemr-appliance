@@ -1,0 +1,55 @@
+#!/usr/bin/python
+
+import os,sys,pprint
+from flask import Flask
+
+CONF_DIR="/etc/ocemr-appliance"
+#CONF_DIR="ocemr-appd-config"
+
+app = Flask(__name__)
+def read_config_file( fname ):
+	r = {}
+	f = open(fname)
+	for line in f.readlines():
+		line=line[:-1]
+		s = line.split("=",1)
+		if len(s) > 1:
+			#sys.stderr.write("%s %s"%( s[1], s[2] ))
+			r[s[0]]=s[1]
+	return r
+	
+def load_runnig_config( staged=False ):
+	
+	config={}
+	for f in os.listdir(CONF_DIR):
+		if not staged and f[-5:] == ".conf":
+			section = f[:-5]
+			if not config.has_key(section):
+				config[section]={}
+			config[section] = read_config_file("%s/%s"%(CONF_DIR,f))
+	return config
+
+@app.route("/running_config")
+def show_running_config():
+    
+    return "<PRE>%s</PRE>"%pprint.pformat(load_runnig_config())
+
+@app.route("/staged_config")
+def show_staged_config():
+    return "Staged Config"
+
+@app.route("/edit/<section>/<name>", methods=['GET', 'POST'])
+def edit( section, name ):
+    if request.method == 'POST':
+        return "Hello World!"
+    else:
+        return ""
+
+@app.route("/commit_config")
+def commit_config():
+    return "Commit Config"
+
+if __name__ == "__main__":
+    app.debug = True
+    app.run(host='0.0.0.0')
+

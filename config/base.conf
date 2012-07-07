@@ -1,0 +1,10 @@
+net_hostname=ocemr-server
+net_domain=ocemr
+net_dev=eth0
+net_addr=192.168.7.2
+net_mask=255.255.255.0
+net_gateway=
+net_dns1=8.8.4.4
+net_dns2=8.8.8.8
+net_dhcp_min=192.168.7.101
+net_dhcp_max=192.168.7.199

@@ -14,7 +14,7 @@ strict-order
 #server=/3.168.192.in-addr.arpa/10.1.2.3
 local=/ocemr/
 
-interface=$(base_config.net_dev)
+interface=$(config.base_net_dev)
 
 #bind-interfaces
 #no-hosts
@@ -29,7 +29,7 @@ expand-hosts
 #    domain of all systems configured by DHCP
 # 3) Provides the domain part for "expand-hosts"
 domain=ocemr
-dhcp-range=$(base_config.net_dhcp_min),$(base_config.net_dhcp_max),12h
+dhcp-range=$(config.base_net_dhcp_min),$(config.base_net_dhcp_max),12h
 
 dhcp-option=42,0.0.0.0
 

@@ -1,1 +1,1 @@
-$(base_config.net_hostname)
+$(config.base_net_hostname)

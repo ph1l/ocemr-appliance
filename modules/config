@@ -1,0 +1,13 @@
+#!/bin/sh
+
+CONF_DIR=/etc/ocemr-appliance
+
+if [ ! -d ${CONF_DIR} ]; then
+	echo "ERROR: ${CONF_DIR} not found."
+	exit 2
+fi
+cd ${CONF_DIR}
+for f in *.conf; do
+	name=${f%.conf}
+	cat $f | grep -vE "^#" | sed -e "s/^/=${name}_/"
+done

@@ -1,5 +1,5 @@
 [%CFEngine BEGIN %]
-domain $(base_config.net_domain)
-nameserver $(base_config.net_dns1)
-nameserver $(base_config.net_dns2)
+domain $(config.base_net_domain)
+nameserver $(config.base_net_dns1)
+nameserver $(config.base_net_dns2)
 [%CFEngine END %]

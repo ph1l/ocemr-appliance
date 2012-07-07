@@ -3,6 +3,7 @@ bundle agent init
 
 methods:
                 "any" usebundle => init_cleanup();
+                "any" usebundle => init_config();
 }
 
 bundle agent init_cleanup
@@ -13,3 +14,11 @@ files:
 			file_select => days_old("3"),
 			depth_search => recurse("inf");
 }
+
+bundle agent init_config
+{
+commands:
+                "$(sys.workdir)/inputs/modules/config"
+                        module => "true";
+}
+

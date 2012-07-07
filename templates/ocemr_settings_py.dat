@@ -6,11 +6,11 @@
 #
 
 DATABASE_ENGINE = 'mysql'
-DATABASE_NAME = '$(ocemr_config.db_name)'
+DATABASE_NAME = '$(config.ocemr_db_name)'
 
-DATABASE_USER = '$(ocemr_config.db_user)'
-DATABASE_PASSWORD = '$(ocemr_config.db_pass)'
-DATABASE_HOST = '$(ocemr_config.db_host)'             # Set to empty string for localhost.
+DATABASE_USER = '$(config.ocemr_db_user)'
+DATABASE_PASSWORD = '$(config.ocemr_db_pass)'
+DATABASE_HOST = '$(config.ocemr_db_host)'             # Set to empty string for localhost.
 DATABASE_PORT = ''             # Set to empty string for default.
 
 # DB_BACKUP_*
@@ -40,14 +40,14 @@ TEMPLATE_DEBUG = DEBUG
 #         Set name and email addresses of administrators. Site error reports
 #	get emailed here.
 ADMINS = (
-    ('$(ocemr_config.admin_name)', '$(ocemr_config.admin_email)'),
+    ('$(config.ocemr_admin_name)', '$(config.ocemr_admin_email)'),
 )
 
 MANAGERS = ADMINS
 
 # SERVER_EMAIL -
 #	  Address from which the server sends email.
-SERVER_EMAIL = 'ocemr@$(base_config.net_hostname).$(base_config.net_domain)'
+SERVER_EMAIL = 'ocemr@$(config.base_net_hostname).$(config.base_net_domain)'
 
 # *_PATH -
 #       Location the software is installed.
@@ -67,8 +67,8 @@ VAR_PATH="/var/lib/ocemr"
 #       Paper Size. 'letter' or 'A4'
 #
 
-PRINTER_NAME = "Some_CUPS_Printer"
-PAPER_SIZE = "Letter"
+PRINTER_NAME = "$(config.ocemr_printer)"
+PAPER_SIZE = "$(config.ocemr_papersize)"
 
 
 # Local time zone for this installation. Choices can be found here:
@@ -76,13 +76,13 @@ PAPER_SIZE = "Letter"
 # although not all choices may be available on all operating systems.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = '$(ocemr_config.timezone)'
+TIME_ZONE = '$(config.ocemr_timezone)'
 
 # Make this unique, and don't share it with anybody.
 #
 #  python -c 'import random; print "".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)])'
 #
-SECRET_KEY = '$(ocemr_config.secret_key)'
+SECRET_KEY = '$(config.ocemr_secret_key)'
 
 ##############################################################################
 #
