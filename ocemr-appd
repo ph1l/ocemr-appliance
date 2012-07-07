@@ -88,7 +88,7 @@ function newPopup(url) {
 {% for s in section %}
 <TR><TH>{{ s }}<TH><TH><TH>
 {% for k in config_keys[s] %}
-<TR>
+<TR{% if running_config[s][k] != staged_config[s][k] %} CLASS=changed {% endif %}>
 <TD>
 <TD>{{ k }}
 <TD>"{{ running_config[s][k] }}"
@@ -238,10 +238,7 @@ td, th {
 table, th, td {
     border: 1px solid black;
 }
-tr.success {
-    background-color:#008800;
-}
-tr.failure {
+tr.changed {
     background-color:#880000;
 }
 """
