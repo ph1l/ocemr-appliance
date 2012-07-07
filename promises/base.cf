@@ -80,7 +80,7 @@ methods:
 			"/etc/network/firewall", "net_firewall" );
 
 		"any" usebundle => insert_template(
-			"/etc/sysctl.d/ip_forward", "sysctl_d_ip_forward" );
+			"/etc/sysctl.d/ip_forward.conf", "sysctl_d_ip_forward" );
 
 	am_gateway.package_dnsmasq::
 
@@ -105,9 +105,9 @@ methods:
 
 commands:
 
-	am_gateway.insert_template__etc_sysctl_d_ip_forward_repaired::
+	am_gateway.insert_template__etc_sysctl_d_ip_forward_conf_repaired::
 
-		"/sbin/sysctl -p /etc/sysctl.d/ip_forward";
+		"/sbin/sysctl -p /etc/sysctl.d/ip_forward.conf";
 
 }
 
