@@ -151,7 +151,7 @@ vars:
 				"foomatic-filters", "cups-bsd" };
 classes:
 		"ocemr_in_lpadmin" expression => returnszero(
-			"/bin/cat /etc/group | grep ^lpadmin | grep ocemr",
+			"/bin/cat /etc/group | grep ^lpadmin | grep ocemr | cat /dev/null",
 			"useshell");
 
 		"package_cups" expression => fileexists(
