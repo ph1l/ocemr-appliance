@@ -165,7 +165,7 @@ body executor control
  any::
 
   splaytime  => "1";
-  mailto     => "cfengine@$(def.domain)";
+  mailto     => "ocemr@localhost";
   mailfrom   => "cfengine@$(sys.host)\.$(def.domain)";
   smtpserver => "localhost";
 
@@ -195,7 +195,7 @@ body reporter control
  any::
 
   reports => { 
-             "all" 
+             #"all" 
              };
 
   build_directory => "$(sys.workdir)/reports";
