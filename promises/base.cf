@@ -143,9 +143,9 @@ bundle agent base_cups
 {
 vars:
 		"additional_printing_packages" slist => {
+				"printer-driver-foo2zjs", };
 				"foomatic-db", "foomatic-db-engine",
-				"foomatic-filters", "foo2zjs", "hplip",
-				"hplip-cups" };
+				"foomatic-filters", "cups-bsd" };
 classes:
 		"ocemr_in_lpadmin" expression => returnszero(
 			"/bin/cat /etc/group | grep ^lpadmin | grep ocemr",
