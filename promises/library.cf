@@ -4,13 +4,23 @@ vars:
 		"latest_version" string => execresult(
 			"/usr/bin/apt-cache show $(package_name) | grep ^Version: | sort -n | tail -1 | cut -d\  -f2",
 			"useshell");
+		"current_version" string => execresult(
+			"/usr/bin/dpkg -l | awk '{print $2 \" \" $3}' | grep ^$(package_name)\  | cut -f2 -d\ ",
+			"useshell");
+
+classes:
+		"up2date" expression => strcmp(
+			"$(latest_version)","$(current_version)");
 packages:
+	!up2date::
 		"$(package_name)"
 			package_policy => "addupdate",
 			package_method => generic,
 			package_version => "$(latest_version)",
 			package_select => "==";
-
+reports:
+	!up2date::
+		"$(package_name) remains out of date (installed:$(current_version), latest:$(latest_version))";
 }
 bundle agent restart_interface(iface_name)
 {
