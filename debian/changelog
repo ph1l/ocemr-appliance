@@ -1,3 +1,18 @@
+ocemr-appliance (1.2) stable; urgency=low
+
+  * make ocemr-appd depend on ocemr-appliance of same version
+  * migrate to new package management bundle
+  * additional cups drivers
+  * add ocemr user to lpadmin group
+  * add cf_promises_validated to package
+  * name sysctl.d file correctly (.conf)
+  * setup log to console
+  * install printer drivers
+  * install ntp
+  * tweak for local operation
+
+ -- Philip J Freeman <philip.freeman@gmail.com>  Sat, 07 Jul 2012 21:39:57 -0500
+
 ocemr-appliance (1.1) stable; urgency=low
 
   * manage watch4inet package
