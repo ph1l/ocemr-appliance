@@ -78,6 +78,8 @@ body agent control
 
   skipidentify => "true";
 
+  abortclasses => { "fatal_config_variable_missing" };
+
  # Environment variables based on Distro
 
  debian::
