@@ -5,13 +5,16 @@
 # 	This is the main django settings file and must be valid python.
 #
 
-DATABASE_ENGINE = 'mysql'
-DATABASE_NAME = '$(config.ocemr_db_name)'
-
-DATABASE_USER = '$(config.ocemr_db_user)'
-DATABASE_PASSWORD = '$(config.ocemr_db_pass)'
-DATABASE_HOST = '$(config.ocemr_db_host)'             # Set to empty string for localhost.
-DATABASE_PORT = ''             # Set to empty string for default.
+DATABASES = {
+       'default': {
+               'ENGINE': 'django.db.backends.mysql',
+               'NAME': '$(config.ocemr_db_name)',
+               'USER': '$(config.ocemr_db_user)',
+               'PASSWORD': '$(config.ocemr_db_pass)',
+               'HOST': '$(config.ocemr_db_host)',
+               'PORT': '',
+               }
+       }
 
 # DB_BACKUP_*
 #
