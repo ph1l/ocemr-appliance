@@ -28,6 +28,9 @@ commands:
 	debian::
 		"/sbin/ifdown $(iface_name)";
 		"/sbin/ifup $(iface_name)";
+reports:
+	debian::
+		"Restarting interface $(iface_name)";
 }
 
 bundle agent service(s,command)
@@ -35,6 +38,9 @@ bundle agent service(s,command)
 commands:
 	debian::
 		"/usr/sbin/invoke-rc.d $(s) $(command)";
+reports:
+	debian::
+		"invoke-rc.d $(s) $(command)";
 }
 
 bundle agent insert_template(dst, src)
