@@ -3,6 +3,7 @@ bundle agent base
 
 methods:
 		"any" usebundle => base_global();
+		"any" usebundle => base_system();
 		"any" usebundle => base_cfengine3();
 		"any" usebundle => base_networking();
 		"any" usebundle => base_apt();
@@ -15,6 +16,18 @@ bundle common base_global
 classes:
 		"am_gateway"
 			expression => strcmp("$(config.base_net_gateway)","");
+}
+
+bundle agent base_system
+{
+methods:
+		"any" usebundle => insert_template(
+			"/etc/rsyslog.d/log_to_console.conf",
+			"rsyslog_log_to_console_conf");
+
+	insert_template__etc_rsyslog_d_log_to_console_conf_repaired::
+		"any" usebundle => service("rsyslog", "reload");
+
 }
 
 bundle agent base_cfengine3
