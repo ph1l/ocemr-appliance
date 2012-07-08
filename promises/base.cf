@@ -146,7 +146,7 @@ bundle agent base_cups
 {
 vars:
 		"additional_printing_packages" slist => {
-				"printer-driver-foo2zjs", };
+				"printer-driver-foo2zjs",
 				"foomatic-db", "foomatic-db-engine",
 				"foomatic-filters", "cups-bsd" };
 classes:
