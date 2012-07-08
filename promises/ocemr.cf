@@ -40,9 +40,9 @@ methods:
 		"any" usebundle => insert_template(
 			"/etc/apache2/sites-available/default", "apache2_default" );
 
-	ocemr__etc_apache2_sites_available_default_repaired::
+	insert_template__etc_ocemr_settings_py_repaired|insert_template__etc_apache2_sites_available_default_repaired::
 
-		"any" usebundle => service("apache2", "force-reload");
+		"any" usebundle => service("apache2", "reload");
 
 	ocemr_apache_not_running::
 
