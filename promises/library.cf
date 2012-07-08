@@ -2,7 +2,7 @@ bundle agent update_package(package_name)
 {
 vars:
 		"latest_version" string => execresult(
-			"/usr/bin/apt-cache show $(package_name) | grep ^Version: | head -1 | cut -d\  -f2",
+			"/usr/bin/apt-cache show $(package_name) | grep ^Version: | sort -n | tail -1 | cut -d\  -f2",
 			"useshell");
 packages:
 		"$(package_name)"
