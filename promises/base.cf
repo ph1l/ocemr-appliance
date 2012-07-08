@@ -149,10 +149,12 @@ vars:
 				"printer-driver-foo2zjs",
 				"foomatic-db", "foomatic-db-engine",
 				"foomatic-filters", "cups-bsd" };
-classes:
-		"ocemr_in_lpadmin" expression => returnszero(
-			"/bin/cat /etc/group | grep ^lpadmin | grep ocemr | cat /dev/null",
+		"lpadmin_members" string => execresult(
+			"/bin/cat /etc/group | grep ^lpadmin | cut -d: -f4",
 			"useshell");
+classes:
+		"ocemr_in_lpadmin" expression => regcmp(
+			"\bocemr\b","$(lpadmin_members)");
 
 		"package_cups" expression => fileexists(
 			"/usr/sbin/cupsd");
