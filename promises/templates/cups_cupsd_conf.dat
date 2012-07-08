@@ -118,5 +118,7 @@ DefaultAuthType Basic
 </Policy>
 
 #
+ServerAlias $(config.base_net_hostname)
+ServerAlias $(config.base_net_hostname).$(config.base_net_domain)
 #
 [%CFEngine END %]
