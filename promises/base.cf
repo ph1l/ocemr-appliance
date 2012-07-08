@@ -86,6 +86,9 @@ methods:
 
 		"any" usebundle => insert_template(
 			"/etc/resolv.conf", "net_resolv_conf");
+
+		"any" usebundle => update_package("ntp");
+
 	am_gateway::
 		"any" usebundle => update_package("dnsmasq");
 		"any" usebundle => update_package("watch4inet");
