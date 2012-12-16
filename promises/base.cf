@@ -45,7 +45,7 @@ methods:
 
 files:
 
-	timezone_valid.insert_template__etc_timezone::
+	timezone_valid::
 		"/etc/localtime"
 			create => "true",
 			classes => cf2_if_else(
@@ -55,6 +55,10 @@ files:
 			copy_from => local_dcp("/usr/share/zoneinfo/$(config.base_timezone)");
 
 reports:
+
+	!timezone_valid::
+
+		"FAILED: TZ ($(config.base_timezone)) invalid";
 
 	base_system_localtime_repaired::
 
