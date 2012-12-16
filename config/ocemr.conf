@@ -1,4 +1,3 @@
-timezone=Etc/UTC
 db_name=ocemr
 db_user=ocemr
 db_host=localhost

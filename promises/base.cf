@@ -20,13 +20,46 @@ classes:
 
 bundle agent base_system
 {
+
+classes:
+
+		"timezone_valid" expression => fileexists(
+			"/usr/share/zoneinfo/$(config.base_timezone)");
+
 methods:
 		"any" usebundle => insert_template(
 			"/etc/rsyslog.d/log_to_console.conf",
 			"rsyslog_log_to_console_conf");
 
+	timezone_valid::
+
+		"any" usebundle => insert_template(
+			"/etc/timezone",
+			"timezone");
+
 	insert_template__etc_rsyslog_d_log_to_console_conf_repaired::
 		"any" usebundle => service("rsyslog", "reload");
+
+files:
+
+	timezone_valid.insert_template__etc_timezone::
+		"/etc/localtime"
+			create => "true",
+			classes => cf2_if_else(
+				"base_system_localtime_repaired",
+				"base_system_localtime_notkept"
+				),
+			copy_from => local_dcp("/usr/share/zoneinfo/$(config.base_timezone)");
+
+reports:
+
+	base_system_localtime_repaired::
+
+		"copied /usr/share/zoneinfo/$(config.base_timezone) -> /etc/localtime";
+
+	base_system_localtime_notkept::
+
+		"FAILED to copy /usr/share/zoneinfo/$(config.base_timezone) -> /etc/localtime";
 
 }
 
