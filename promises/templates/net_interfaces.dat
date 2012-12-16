@@ -2,6 +2,14 @@
 auto lo
 iface lo inet loopback
 
+[%CFEngine END %]
+[%CFEngine do_dhcp:: %]
+[%CFEngine BEGIN %]
+auto $(config.base_net_dev)
+iface $(config.base_net_dev) inet dhcp
+[%CFEngine END %]
+[%CFEngine !do_dhcp:: %]
+[%CFEngine BEGIN %]
 auto $(config.base_net_dev)
 iface $(config.base_net_dev) inet static
 	address	$(config.base_net_addr)

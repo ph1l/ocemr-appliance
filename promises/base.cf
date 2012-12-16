@@ -16,6 +16,9 @@ bundle common base_global
 classes:
 		"am_gateway"
 			expression => strcmp("$(config.base_net_gateway)","");
+
+		"do_dhcp"
+			expression => strcmp("$(config.base_net_addr)","");
 }
 
 bundle agent base_system
