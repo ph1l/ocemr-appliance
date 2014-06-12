@@ -14,11 +14,13 @@ methods:
 bundle common base_global
 {
 classes:
-		"am_gateway"
-			expression => strcmp("$(config.base_net_gateway)","");
 
 		"do_dhcp"
 			expression => strcmp("$(config.base_net_addr)","");
+
+  !do_dhcp::
+		"am_gateway"
+			expression => strcmp("$(config.base_net_gateway)","");
 }
 
 bundle agent base_system
@@ -169,6 +171,14 @@ commands:
 
 bundle agent base_apt
 {
+vars:
+    "dev_packages" slist =>{
+      "build-essential",
+      "debhelper",
+      "dh-make",
+      "fakeroot",
+      };
+
 classes:
 		"package_kremlor_archive_keyring" expression => fileexists(
 			"/usr/share/keyrings/kremlor-archive-keyring.gpg");
@@ -177,6 +187,9 @@ methods:
 		"any" usebundle => update_package("kremlor-archive-keyring");
 		"any" usebundle => insert_template(
 			"/etc/apt/sources.list", "apt_sources.list");
+	am_development::
+		"any" usebundle => update_package("$(dev_packages)");
+
 commands:
 	!package_kremlor_archive_keyring::
 		"/usr/bin/dpkg -i $(sys.workdir)/inputs/data/kremlor-archive-keyring_2012.03.19squeeze1_all.deb"
