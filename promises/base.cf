@@ -177,6 +177,8 @@ vars:
       "debhelper",
       "dh-make",
       "fakeroot",
+      "vim",
+      "git-buildpackage",
       };
 
 classes:
