@@ -15,7 +15,7 @@ iface $(config.base_net_dev) inet static
 	address	$(config.base_net_addr)
 	netmask $(config.base_net_mask)
 [%CFEngine END %]
-[%CFEngine am_gateway:: %]
+[%CFEngine !do_dhcp.am_gateway:: %]
 	pre-up /sbin/iptables-restore /etc/network/firewall
-[%CFEngine !am_gateway:: %]
+[%CFEngine !do_dhcp.!am_gateway:: %]
 	gateway $(config.base_net_gateway)
