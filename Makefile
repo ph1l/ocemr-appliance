@@ -1,9 +1,10 @@
 #
 
-POLICY_FILES=cfengine_stdlib.cf promises.cf library.cf init.cf base.cf ocemr.cf failsafe.cf
+POLICY_FILES=promises.cf library.cf init.cf base.cf ocemr.cf update.cf
 
 POLICY_DIR=/var/cfengine/masterfiles
 
+CF_BIN=/var/cfengine/bin
 
 ##########################################
 
@@ -54,7 +55,7 @@ install: $(addprefix promises/,$(POLICY_FILES))
 
 check: $(addprefix promises/,$(POLICY_FILES))
 	
-	( cd promises ; /usr/sbin/cf-promises -Ivf ./promises.cf )
+	( cd promises ; $(CF_BIN)/cf-promises -Ivf ./promises.cf )
 	
 
 .PHONY: all check install
