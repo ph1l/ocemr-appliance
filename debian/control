@@ -8,7 +8,7 @@ Homepage: https://github.com/ph1l/ocemr-appliance
 
 Package: ocemr-appliance
 Architecture: all
-Depends: ${misc:Depends}, cfengine3
+Depends: ${misc:Depends}, cfengine-community
 Description: OCEMR Appliance Automation Package.
  This package installs cfengine policy to maintain an OCEMR appliance server.
 
