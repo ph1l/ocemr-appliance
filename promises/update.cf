@@ -36,13 +36,13 @@ bundle agent cfe_internal_update
                        comment => "Path to public key file",
                         handle => "update_vars_ppkeys_file";
 
-   "file_check"         string => translatepath("$(inputs_dir)/promises.cf"),
-                       comment => "Path to a policy file",
-                        handle => "update_vars_file_check";
-
    "master_location"    string => "/var/cfengine/masterfiles",
                        comment => "The master cfengine policy directory on the policy host",
                         handle => "update_vars_master_location";
+
+   "file_check"         string => translatepath("$(master_location)/promises.cf"),
+                       comment => "Path to a policy file",
+                        handle => "update_vars_file_check";
 
    "agents" slist => {
                       "cf-agent",
@@ -125,24 +125,24 @@ bundle agent cfe_internal_update
    "$(inputs_dir)/cf_promises_validated"
         comment => "Check whether a validation stamp is available for a new policy update to reduce the distributed load",
          handle => "update_files_check_valid_update",
-      copy_from => u_rcp("$(master_location)/cf_promises_validated","$(sys.policy_hub)"),
+      copy_from => u_rcp("$(master_location)/cf_promises_validated","localhost"),
          action => u_immediate,
         classes => u_if_repaired("validated_updates_ready");
 
    "$(modules_dir)"
            comment => "Always update modules files on client side",
             handle => "update_files_update_modules",
-         copy_from => u_rcp("$(modules_dir)","$(sys.policy_hub)"),
+         copy_from => u_rcp("$(modules_dir)","localhost"),
       depth_search => u_recurse("inf"),
              perms => u_m("755"),
             action => u_immediate;
 
-  am_policy_hub|validated_updates_ready::  # policy hub should always put masterfiles in inputs in order to check new policy
+  validated_updates_ready::  # policy hub should always put masterfiles in inputs in order to check new policy
 
    "$(inputs_dir)"
            comment => "Copy policy updates from master source on policy server if a new validation was acquired",
             handle => "update_files_inputs_dir",
-         copy_from => u_rcp("$(master_location)","$(sys.policy_hub)"),
+         copy_from => u_rcp("$(master_location)","localhost"),
       depth_search => u_recurse("inf"),
       file_select  => u_input_files,
             action => u_immediate,
@@ -174,8 +174,6 @@ bundle agent cfe_internal_update
       comment => "Remove all .cfsaved file extension",
        handle => canonify("update_files_remove_$(agent)_cfsaved"),
        delete => u_tidy;
-
-  am_policy_hub::
 
    "$(master_location)/."
            comment => "Make sure masterfiles folder has right file permissions",
@@ -216,7 +214,7 @@ body file_select u_cf3_files
 
 body file_select u_input_files
 {
- leaf_name => { ".*.cf",".*.dat",".*.txt" };
+ leaf_name => { ".*" };
  file_result => "leaf_name";
 }
 

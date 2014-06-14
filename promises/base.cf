@@ -75,7 +75,7 @@ reports:
 bundle agent base_cfengine3
 {
 methods:
-		"any" usebundle => update_package("cfengine3");
+		"any" usebundle => update_package("cfengine-community");
 		"any" usebundle => update_package("ocemr-appliance");
 		"any" usebundle => update_package("ocemr-appd");
 

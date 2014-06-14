@@ -2002,43 +2002,35 @@ package_delete_command => "\"$(sys.winsysdir)\msiexec.exe\" /qn /x";
 
 ##
 
-# This package_method uses yum to install, update and list packages.
-#
-# It will use "rpm -e" to remove packages. Please note that if several packages
-# with the same name but varying versions or architectures are installed,
-# "rpm -e" will return an error and not delete any of them.
 body package_method yum
 {
-      package_changes => "bulk";
-      package_list_command => "/usr/bin/yum --quiet list installed";
-      package_patch_list_command => "/usr/bin/yum --quiet check-update";
+package_changes => "bulk";
+package_list_command => "/usr/bin/yum --quiet list installed";
+package_patch_list_command => "/usr/bin/yum --quiet check-update";
 
-      # Remember to escape special characters like |
+# Remember to escape special characters like |
 
-      package_list_name_regex    => "([^.]+).*";
-      package_list_version_regex => "[^\s]\s+([^\s]+).*";
-      package_list_arch_regex    => "[^.]+\.([^\s]+).*";
+package_list_name_regex    => "([^.]+).*";
+package_list_version_regex => "[^\s]\s+([^\s]+).*";
+package_list_arch_regex    => "[^.]+\.([^\s]+).*";
 
-      package_installed_regex => ".*(installed|\s+@).*";
-      package_name_convention => "$(name)-$(version).$(arch)";
+package_installed_regex => ".*(installed|\s+@).*";
+package_name_convention => "$(name)-$(version).$(arch)";
 
-      # just give the package name to rpm to delete, otherwise it gets "name.*" (from package_name_convention above)
-      package_delete_convention => "$(name)";
+# set it to "0" to avoid caching of list during upgrade
+package_list_update_command => "/usr/bin/yum --quiet check-update";
+package_list_update_ifelapsed => "240";
 
-      # set it to "0" to avoid caching of list during upgrade
-      package_list_update_command => "/usr/bin/yum --quiet check-update";
-      package_list_update_ifelapsed => "240";
+package_patch_installed_regex => "^\s.*";
+package_patch_name_regex    => "([^.]+).*";
+package_patch_version_regex => "[^\s]\s+([^\s]+).*";
+package_patch_arch_regex    => "[^.]+\.([^\s]+).*";
 
-      package_patch_installed_regex => "^\s.*";
-      package_patch_name_regex    => "([^.]+).*";
-      package_patch_version_regex => "[^\s]\s+([^\s]+).*";
-      package_patch_arch_regex    => "[^.]+\.([^\s]+).*";
-
-      package_add_command => "/usr/bin/yum -y install";
-      package_update_command => "/usr/bin/yum -y update";
-      package_patch_command => "/usr/bin/yum -y update";
-      package_delete_command => "/bin/rpm -e --nodeps";
-      package_verify_command => "/bin/rpm -V";
+package_add_command => "/usr/bin/yum -y install";
+package_update_command => "/usr/bin/yum -y update";
+package_patch_command => "/usr/bin/yum -y update";
+package_delete_command => "/bin/rpm -e --nodeps";
+package_verify_command => "/bin/rpm -V";
 }
 
 ##
@@ -2048,10 +2040,6 @@ body package_method yum_rpm
 # Contributed by Trond Hasle Amundsen
 # More efficient package method for RPM-based systems - uses rpm
 # instead of yum to list installed packages
-#
-# It will use "rpm -e" to remove packages. Please note that if several packages
-# with the same name but varying versions or architectures are installed,
-# "rpm -e" will return an error and not delete any of them.
 
 {
   package_changes => "bulk";
@@ -2064,9 +2052,6 @@ body package_method yum_rpm
 
   package_installed_regex => ".*";
   package_name_convention => "$(name)-$(version).$(arch)";
-
-  # just give the package name to rpm to delete, otherwise it gets "name-*.*" (from package_name_convention above)
-  package_delete_convention => "$(name)";
 
   # set it to "0" to avoid caching of list during upgrade
   package_list_update_command => "/usr/bin/yum --quiet check-update";
@@ -2954,7 +2939,7 @@ vars:
   "restartcommand[auditd]" string => "/etc/init.d/auditd restart";
   "reloadcommand[auditd]"  string => "/etc/init.d/auditd reload";
   "stopcommand[auditd]"    string => "/etc/init.d/auditd stop";
-  "pattern[auditd]"        string => ".*auditd$";
+  "pattern[auditd]"        string => ".*auditd.*";
 
   "startcommand[autofs]"   string => "/etc/init.d/autofs start";
   "restartcommand[autofs]" string => "/etc/init.d/autofs restart";
