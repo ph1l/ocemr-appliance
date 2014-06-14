@@ -2,9 +2,9 @@
 
 POLICY_FILES=promises.cf library.cf init.cf base.cf ocemr.cf update.cf
 
-POLICY_DIR=/var/cfengine/masterfiles
+WORK_DIR=/var/cfengine
 
-CF_BIN=/var/cfengine/bin
+CF_BIN=$(WORK_DIR)/bin
 
 ##########################################
 
@@ -13,31 +13,31 @@ all: check
 
 install: $(addprefix promises/,$(POLICY_FILES))
 	
-	if [ ! -d $(DESTDIR)$(POLICY_DIR)/templates ]; then \
-	  mkdir -p $(DESTDIR)$(POLICY_DIR)/templates; \
+	if [ ! -d $(DESTDIR)$(WORK_DIR)/masterfiles/templates ]; then \
+	  mkdir -p $(DESTDIR)$(WORK_DIR)/masterfiles/templates; \
 	  fi
 	
-	if [ ! -d $(DESTDIR)$(POLICY_DIR)/data ]; then \
-	  mkdir -p $(DESTDIR)$(POLICY_DIR)/data; \
+	if [ ! -d $(DESTDIR)$(WORK_DIR)/masterfiles/data ]; then \
+	  mkdir -p $(DESTDIR)$(WORK_DIR)/masterfiles/data; \
 	  fi
 	
-	if [ ! -d $(DESTDIR)$(POLICY_DIR)/modules ]; then \
-	  mkdir -p $(DESTDIR)$(POLICY_DIR)/modules; \
+	if [ ! -d $(DESTDIR)$(WORK_DIR)/modules ]; then \
+	  mkdir -p $(DESTDIR)$(WORK_DIR)/modules; \
 	  fi
 	
 	install --owner=root --group=root --mode=644 \
-	  $(addprefix promises/,$(POLICY_FILES)) $(DESTDIR)$(POLICY_DIR)
+	  $(addprefix promises/,$(POLICY_FILES)) $(DESTDIR)$(WORK_DIR)/masterfiles
 	
 	install --owner=root --group=root --mode=644 \
-	  promises/templates/*.dat $(DESTDIR)$(POLICY_DIR)/templates
+	  promises/templates/*.dat $(DESTDIR)$(WORK_DIR)/masterfiles/templates
 	
 	install --owner=root --group=root --mode=644 \
-	  promises/data/* $(DESTDIR)$(POLICY_DIR)/data
+	  promises/data/* $(DESTDIR)$(WORK_DIR)/masterfiles/data
 	
 	install --owner=root --group=root --mode=755 \
-	  promises/modules/* $(DESTDIR)$(POLICY_DIR)/modules
+	  promises/modules/* $(DESTDIR)$(WORK_DIR)/modules
 	
-	date > $(DESTDIR)$(POLICY_DIR)/cf_promises_validated
+	date > $(DESTDIR)$(WORK_DIR)/masterfiles/cf_promises_validated
 	
 	if [ ! -d $(DESTDIR)/usr/sbin ]; then \
 	  mkdir -p $(DESTDIR)/usr/sbin; \
