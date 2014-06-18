@@ -50,6 +50,7 @@ files:
 	timezone_valid::
 		"/etc/localtime"
 			create => "true",
+			perms => m("644"),
 			classes => cf2_if_else(
 				"base_system_localtime_repaired",
 				"base_system_localtime_notkept"
