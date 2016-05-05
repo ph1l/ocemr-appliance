@@ -190,6 +190,9 @@ methods:
 		"any" usebundle => update_package("kremlor-archive-keyring");
 		"any" usebundle => insert_template(
 			"/etc/apt/sources.list", "apt_sources.list");
+		"any" usebundle => insert_template(
+			"/etc/apt/apt.conf.d/10no--check-valid-until.conf",
+			"apt_10no--check-valid-until.conf");
 	am_development::
 		"any" usebundle => update_package("$(dev_packages)");
 
