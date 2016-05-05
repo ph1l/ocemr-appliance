@@ -197,8 +197,11 @@ methods:
 		"any" usebundle => update_package("$(dev_packages)");
 
 commands:
-	!package_kremlor_archive_keyring::
-		"/usr/bin/dpkg -i $(sys.workdir)/inputs/data/kremlor-archive-keyring_2012.03.19squeeze1_all.deb"
+		"/usr/bin/apt-key adv --list-key 2697143F"
+			contain => in_shell,
+      classes => if_repaired("key_exists");
+	!key_exists::
+		"/usr/bin/wget --no-check-certificate -q -O- http://ruiner.halo.nu/~elektron/2697143F.asc | /usr/bin/apt-key add -"
 			contain => in_shell;
 }
 bundle agent base_cups

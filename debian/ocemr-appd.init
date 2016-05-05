@@ -9,7 +9,7 @@
 # Description:       This script starts and stops the ocemr appliance daemon
 ### END INIT INFO
 
-# Author: Philip J Freeman <philip.freeman@gmail.com>
+# Author: Philip J Freeman <elektron@halo.nu>
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="ocemr-appd"                 # Introduce a short description here

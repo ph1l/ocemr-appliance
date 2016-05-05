@@ -1,14 +1,14 @@
 Source: ocemr-appliance
 Section: admin
 Priority: extra
-Maintainer: Philip J Freeman <philip.freeman@gmail.com>
-Build-Depends: debhelper (>= 8.0.0)
+Maintainer: Philip J Freeman <elektron@halo.nu>
+Build-Depends: debhelper (>= 8.0.0), cfengine3 (>= 3.3.0), cfengine3 (<< 3.4.0)
 Standards-Version: 3.9.2
 Homepage: https://github.com/ph1l/ocemr-appliance
 
 Package: ocemr-appliance
 Architecture: all
-Depends: ${misc:Depends}, cfengine3
+Depends: ${misc:Depends}, cfengine3 (>= 3.3.0), cfengine3 (<< 3.4.0)
 Description: OCEMR Appliance Automation Package.
  This package installs cfengine policy to maintain an OCEMR appliance server.
 

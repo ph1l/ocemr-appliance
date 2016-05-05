@@ -1,3 +1,11 @@
+ocemr-appliance (1.4.2) stable; urgency=medium
+
+  * switch apt repo from deprecated kremlor to halo.nu
+  * package cleanup
+  * hack apt to ignore repo expiration :-/
+
+ -- Philip J Freeman <elektron@halo.nu>  Thu, 05 May 2016 11:58:36 -0700
+
 ocemr-appliance (1.4.1) stable; urgency=medium
 
   * fix permissions of /etc/localtime
