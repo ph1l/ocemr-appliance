@@ -1,0 +1,11 @@
+---
+# handlers file for ocemr
+- name: Initialize MySQL DB
+  shell: PASSWD="{{ db_password }}" MYSQL_ADMIN_PASSWD="{{ db_admin_password }}" /usr/share/ocemr/util/initialize_mysql_db.sh
+  notify:
+    - Restart Apache2
+
+- name: Restart Apache2
+  service:
+    name: apache2
+    state: restarted

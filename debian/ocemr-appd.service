@@ -1,0 +1,11 @@
+[Unit]
+Description=ocemr-appd daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/ocemr-appd
+Restart=on-failure
+User=www-data
+
+[Install]
+WantedBy=multi-user.target

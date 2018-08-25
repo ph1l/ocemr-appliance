@@ -1,0 +1,13 @@
+---
+- hostname:
+    name: "{{ base.net_hostname }}"
+
+- replace:
+    path: /etc/hosts
+    regexp: '^127.0.1.1.*'
+    replace: '127.0.1.1\t{{ base.net_hostname }}.{{ base.net_domain }}\t{{ base.net_hostname }}'
+    backup: yes
+
+- name: set timezone
+  timezone:
+    name: "{{ base.timezone }}"

@@ -1,3 +1,12 @@
+ocemr-appliance (1.5.0) stable; urgency=medium
+
+  * ansible
+  * new repo @ e2r4.com
+  * systemd init
+  * support new version of ocemr
+
+ -- Pat Freeman <github@e2r4.com>  Sat, 25 Aug 2018 17:02:06 -0500
+
 ocemr-appliance (1.4.2) stable; urgency=medium
 
   * switch apt repo from deprecated kremlor to halo.nu

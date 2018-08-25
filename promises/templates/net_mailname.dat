@@ -1,3 +1,0 @@
-[%CFEngine BEGIN %]
-$(config.base_net_hostname).$(config.base_net_domain)
-[%CFEngine END %]

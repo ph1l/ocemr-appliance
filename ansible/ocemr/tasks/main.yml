@@ -1,0 +1,20 @@
+---
+# tasks file for ocemr
+
+- name: Include vars of base.yaml
+  include_vars:
+    file: /etc/ocemr-appliance/base.yaml
+    name: base
+
+- name: Include vars of ocemr.yaml
+  include_vars:
+    file: /etc/ocemr-appliance/ocemr.yaml
+    name: ocemr
+
+- set_fact:
+   existing_hostname: "{{ ansible_hostname }}"
+   existing_domain: "{{ ansible_domain }}"
+
+- include_tasks: system_config.yml
+- include_tasks: packages.yml
+- include_tasks: app_config.yml

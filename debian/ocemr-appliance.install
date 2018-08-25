@@ -1,3 +1,2 @@
-var/cfengine/masterfiles/*
 /etc/ocemr-appliance/*
-
+/etc/sudoers.d/ocemr

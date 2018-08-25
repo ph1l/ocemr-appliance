@@ -1,5 +1,0 @@
-[%CFEngine BEGIN %]
-domain $(config.base_net_domain)
-nameserver $(config.base_net_dns1)
-nameserver $(config.base_net_dns2)
-[%CFEngine END %]
