@@ -40,3 +40,5 @@
   when: database_server and ansible_distribution == 'Debian'
   notify:
     - Initialize MySQL DB
+
+- meta: flush_handlers

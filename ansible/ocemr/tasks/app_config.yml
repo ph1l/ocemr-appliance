@@ -10,19 +10,12 @@
     - Restart Apache2
 
 - name: Super User Exists?
-  command: echo "from django.contrib.auth import get_user_model; User = get_user_model(); print(User.objects.filter(username='{{ ocemr.admin_name }}').count()>0)" | python /usr/share/ocemr/apps/ocemr/manage.py shell
-  args:
-    chdir: "/usr/share/ocemr/apps"
-  environment:
-    DJANGO_SETTINGS_MODULE: "ocemr.settings"
-    PYTHONPATH: "/usr/share/ocemr/apps"
+  shell: echo "from django.contrib.auth import get_user_model; User = get_user_model(); print(User.objects.filter(username='{{ ocemr.admin_name }}').count()>0)" | DJANGO_SETTINGS_MODULE=ocemr.settings PYTHONPATH=/usr/share/ocemr/apps python /usr/share/ocemr/apps/ocemr/manage.py shell
   register: superuser_existed
 
 - name: Create Super User
-  django_manage: command="createsuperuser --noinput --username={{ ocemr.admin_name }} --email={{ ocemr.admin_email }}"
-                 app_path="/usr/share/ocemr/apps"
-                 settings="ocemr.settings"
-  when: not superuser_existed
+  shell: ocemr-manage createsuperuser --noinput --username={{ ocemr.admin_name }} --email={{ ocemr.admin_email }}
+  when: superuser_existed.stdout == "False"
 
 - name: Change Super User Password
   expect:
