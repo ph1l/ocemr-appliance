@@ -1,7 +1,7 @@
 ---
 # handlers file for ocemr
 - name: Initialize MySQL DB
-  shell: PASSWD="{{ db_password }}" MYSQL_ADMIN_PASSWD="{{ db_admin_password }}" /usr/share/ocemr/util/initialize_mysql_db.sh
+  shell: i=0;while [ $i -lt 5 ];do if echo "SELECT 1;"|mysql -uroot -p"{{ db_admin_password }}" 2>&1 >/dev/null;then break;else i=$((i+=1));sleep $i;fi;done;PASSWD="{{ db_password }}" MYSQL_ADMIN_PASSWD="{{ db_admin_password }}" /usr/share/ocemr/util/initialize_mysql_db.sh
   notify:
     - Restart Apache2
 

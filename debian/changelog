@@ -1,3 +1,10 @@
+ocemr-appliance (1.5.2) stable; urgency=medium
+
+  * Fix handler ordering
+  * Utilize utilities instead of re-writing them
+
+ -- Pat Freeman <github@e2r4.com>  Mon, 27 Aug 2018 18:47:16 -0500
+
 ocemr-appliance (1.5.1) stable; urgency=medium
 
   * Fixed django superuser handling in ansible

@@ -9,8 +9,10 @@
   notify:
     - Restart Apache2
 
+- meta: flush_handlers
+
 - name: Super User Exists?
-  shell: echo "from django.contrib.auth import get_user_model; User = get_user_model(); print(User.objects.filter(username='{{ ocemr.admin_name }}').count()>0)" | DJANGO_SETTINGS_MODULE=ocemr.settings PYTHONPATH=/usr/share/ocemr/apps python /usr/share/ocemr/apps/ocemr/manage.py shell
+  shell: echo "from django.contrib.auth import get_user_model; User = get_user_model(); print(User.objects.filter(username='{{ ocemr.admin_name }}').count()>0)" | ocemr-manage shell
   register: superuser_existed
 
 - name: Create Super User
