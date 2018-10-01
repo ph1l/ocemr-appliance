@@ -1,0 +1,17 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto {{ ansible_default_ipv4.interface }}
+iface {{ ansible_default_ipv4.interface }} inet static
+  address {{ base.net_address }}
+  network {{ base.net_network }}
+  netmask {{ base.net_netmask }}
+  broadcast {{ base.net_broadcast }}
+  gateway {{ base.net_gateway }}

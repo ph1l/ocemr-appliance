@@ -11,3 +11,41 @@
 - name: set timezone
   timezone:
     name: "{{ base.timezone }}"
+
+- name: configure dhcp networking
+  template:
+    src: network_interfaces.dhcp.j2
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+  when: base.net_dhcp
+  notify:
+    - Restart Networking
+
+- name: configure static networking
+  template:
+    src: network_interfaces.static.j2
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+  when: not base.net_dhcp
+  notify:
+    - Restart Networking
+
+- name: configure resolv.conf
+  template:
+    src: resolv_conf.j2
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+  when: not base.net_dhcp
+
+- name: enable serial console
+  systemd:
+    name: serial-getty@ttyS0.service
+    enabled: True
+
+- name: start serial console
+  systemd:
+    name: serial-getty@ttyS0.service
+    state: started

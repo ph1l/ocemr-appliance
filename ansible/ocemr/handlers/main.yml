@@ -9,3 +9,8 @@
   service:
     name: apache2
     state: restarted
+
+- name: Restart Networking
+  service:
+    name: networking
+    state: restarted

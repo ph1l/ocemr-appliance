@@ -5,5 +5,5 @@
   vars:
           - app_server: true
           - database_server: true
-          - db_admin_password: asdf
+          - db_admin_password: adminpassword
           - ocemr_debug: False
