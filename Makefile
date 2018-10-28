@@ -23,16 +23,16 @@ install:
 	install --owner=www-data --group=www-data --mode=640 \
 	  config/* $(DESTDIR)/etc/ocemr-appliance
 
-	if [ ! -d $(DESTDIR)/etc/ocemr-appliance/ansible ]; then \
-	  mkdir -p $(DESTDIR)/etc/ocemr-appliance/ansible; \
+	if [ ! -d $(DESTDIR)/usr/share/ocemr-appliance/ansible ]; then \
+	  mkdir -p $(DESTDIR)/usr/share/ocemr-appliance/ansible; \
 	  fi
 
 	install --owner=www-data --group=www-data --mode=640 \
-	  ansible/ocemr.yml $(DESTDIR)/etc/ocemr-appliance/ansible/
+	  ansible/ocemr.yml $(DESTDIR)/usr/share/ocemr-appliance/ansible/
 
 	find ansible/ocemr/ -type f -exec install \
 	  --owner=www-data --group=www-data --mode=640 -D \
-	  "{}" "$(DESTDIR)/etc/ocemr-appliance/{}" \;
+	  "{}" "$(DESTDIR)/usr/share/ocemr-appliance/{}" \;
 
 .PHONY: install
 

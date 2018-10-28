@@ -12,7 +12,7 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
-CONF_DIR="/etc/ocemr-appliance"
+CONF_DIR="/usr/share/ocemr-appliance"
 
 app = Flask(__name__)
 
@@ -251,7 +251,7 @@ tr.changed {
 def applyconfig():
     sleep(1)
     def inner():
-        cmd = [ "sudo", "/usr/bin/ansible-playbook", "-M", "/etc/ocemr-appliance/ansible", "/etc/ocemr-appliance/ansible/ocemr.yml" ]
+        cmd = [ "sudo", "/usr/bin/ansible-playbook", "-M", "/usr/share/ocemr-appliance/ansible", "/usr/share/ocemr-appliance/ansible/ocemr.yml" ]
         proc = subprocess.Popen(
                 cmd,
                 stdout=subprocess.PIPE,
