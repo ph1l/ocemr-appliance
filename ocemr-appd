@@ -12,7 +12,7 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
-CONF_DIR="/usr/share/ocemr-appliance"
+CONF_DIR="/etc/ocemr-appliance"
 
 app = Flask(__name__)
 
