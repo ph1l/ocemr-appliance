@@ -2,7 +2,15 @@
 # vi:tabstop=4:expandtab
 
 import os,sys,shutil
-from flask import Flask, redirect, url_for, render_template_string, request, flash
+from flask import Flask, redirect, url_for, render_template_string, request, flash, Response
+from select import select
+import subprocess
+from time import sleep
+from yaml import load, dump
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 CONF_DIR="/etc/ocemr-appliance"
 
@@ -11,19 +19,14 @@ app = Flask(__name__)
 
 def read_config_file( fname ):
     r = {}
-    f = open(fname)
-    for line in f.readlines():
-        line=line[:-1]
-        s = line.split("=",1)
-        if len(s) > 1:
-            #sys.stderr.write("%s %s"%( s[1], s[2] ))
-            r[s[0]]=s[1]
+    f = file(fname,'r')
+    r = load(f)
     return r
 
 def get_sections():
     sections=[]
     for f in os.listdir(CONF_DIR):
-        if f[-5:] == ".conf":
+        if f[-5:] == ".yaml":
             sections.append(f[:-5])
     return sections
     
@@ -31,7 +34,7 @@ def load_runnig_config():
     
     config={}
     for f in os.listdir(CONF_DIR):
-        if f[-5:] == ".conf":
+        if f[-5:] == ".yaml":
             section = f[:-5]
             if not config.has_key(section):
                 config[section]={}
@@ -42,7 +45,7 @@ def load_staged_config():
     
     config={}
     for f in os.listdir(CONF_DIR):
-        if f[-7:] == ".conf.s":
+        if f[-7:] == ".yaml.s":
             section = f[:-7]
             if not config.has_key(section):
                 config[section]={}
@@ -53,9 +56,8 @@ def set_config_item(section,name,value):
     config=load_staged_config()
     config[section][name] = value
 
-    f = open("%s/%s.conf.s"%(CONF_DIR,section), "wb")
-    for name in config[section].keys():
-        f.write("%s=%s\n"%(name,config[section][name]))
+    f = file("%s/%s.yaml.s"%(CONF_DIR,section), "wb")
+    dump(config[section], f)
     f.close()
 
 @app.route("/")
@@ -98,6 +100,7 @@ function newPopup(url) {
 {% endfor %}
 </TABLE>
 <A HREF=/unstage_config>Cancel Staged Changes</A> or <A HREF=/commit_config>Commit Staged Changes</A>
+<BR><A HREF="JavaScript:window.location.assign('/commit_config');newPopup('/applyconfig');">Apply New Configuration</A>
 </BODY>
 </HTML>
 
@@ -154,8 +157,8 @@ def edit( section, name ):
 def unstage_config():
     for s in get_sections():
         shutil.copy(
-                "%s/%s.conf"%(CONF_DIR,s),
-                "%s/%s.conf.s"%(CONF_DIR,s),
+                "%s/%s.yaml"%(CONF_DIR,s),
+                "%s/%s.yaml.s"%(CONF_DIR,s),
             )
     flash("Staged Changes Canceled...")
     return redirect(url_for('index'))
@@ -164,8 +167,8 @@ def unstage_config():
 def commit_config():
     for s in get_sections():
         shutil.copy(
-            "%s/%s.conf.s"%(CONF_DIR,s),
-            "%s/%s.conf"%(CONF_DIR,s),
+            "%s/%s.yaml.s"%(CONF_DIR,s),
+            "%s/%s.yaml"%(CONF_DIR,s),
         )
     flash("Staged Changes Committed...")
     return redirect(url_for('index'))
@@ -243,6 +246,34 @@ tr.changed {
 }
 """
     return render_template_string(TEMPLATE)
+
+@app.route( '/applyconfig' )
+def applyconfig():
+    sleep(1)
+    def inner():
+        cmd = [ "sudo", "/usr/bin/ansible-playbook", "-M", "/usr/share/ocemr-appliance/ansible", "/usr/share/ocemr-appliance/ansible/ocemr.yml" ]
+        proc = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+                )
+        try:
+            awaiting = [proc.stdout, proc.stderr]
+            while awaiting:
+                ready, _, _ = select(awaiting, [], [])
+                for pipe in ready:
+                    line = pipe.readline()
+                    if line:
+                        yield line.rstrip() + '<br/>\n'
+                    else:
+                        awaiting.remove(pipe)
+            if proc.poll() is None:
+                proc.terminate()
+
+        except GeneratorExit:
+            proc.terminate()
+
+    return Response(inner(), mimetype='text/html')
 
 if __name__ == "__main__":
     app.debug = True

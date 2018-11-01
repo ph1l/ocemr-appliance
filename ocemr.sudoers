@@ -1,0 +1,1 @@
+www-data ALL=(root) NOPASSWD: /usr/bin/ansible-playbook -M /usr/share/ocemr-appliance/ansible /usr/share/ocemr-appliance/ansible/ocemr.yml

@@ -2,15 +2,15 @@ Source: ocemr-appliance
 Section: admin
 Priority: extra
 Maintainer: Philip J Freeman <elektron@halo.nu>
-Build-Depends: debhelper (>= 8.0.0), cfengine3 (>= 3.3.0), cfengine3 (<< 3.4.0)
+Build-Depends: debhelper (>= 10.0.0), dh-systemd
 Standards-Version: 3.9.2
 Homepage: https://github.com/ph1l/ocemr-appliance
 
 Package: ocemr-appliance
 Architecture: all
-Depends: ${misc:Depends}, cfengine3 (>= 3.3.0), cfengine3 (<< 3.4.0)
+Depends: ${misc:Depends}, sudo, ansible, python-pexpect
 Description: OCEMR Appliance Automation Package.
- This package installs cfengine policy to maintain an OCEMR appliance server.
+ This package installs ansilble playbook to maintain an OCEMR appliance server.
 
 Package: ocemr-appd
 Architecture: all

@@ -1,0 +1,42 @@
+---
+- apt_key:
+    url: http://e2r4.com/repo/signing.key
+    state: present
+
+- apt_repository:
+    repo: deb http://e2r4.com/repo {{ ansible_lsb.codename }} main
+    state: present
+    filename: ocemr
+
+- name: Install ocemr
+  apt:
+    pkg: ocemr
+    state: present
+    update_cache: true
+  when: app_server
+  register: ocemrinstall
+
+- name: Install gpg
+  apt:
+    pkg: gpg
+    state: present
+    update_cache: true
+  when: database_server
+
+- name: Install mysql-server
+  apt:
+    pkg: mysql-server
+    state: present
+    update_cache: true
+  when: database_server and ansible_distribution == 'Ubuntu'
+  notify:
+    - Initialize MySQL DB
+
+- name: Install mariadb-server
+  apt:
+    pkg: mariadb-server
+    state: present
+    update_cache: true
+  when: database_server and ansible_distribution == 'Debian'
+  notify:
+    - Initialize MySQL DB

@@ -20,8 +20,9 @@ set -e
 
 case "$1" in
     configure)
-    chown www-data:www-data /etc/ocemr-appliance/*.conf
-    chown www-data:www-data /etc/ocemr-appliance/*.conf.s
+        chown www-data:www-data /etc/ocemr-appliance/*.yaml
+        chown www-data:www-data /etc/ocemr-appliance/*.yaml.s
+        service ocemr-appd start
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

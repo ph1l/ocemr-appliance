@@ -1,0 +1,27 @@
+---
+- name: Configure ocemr
+  template:
+    src: ocemr_settings.py.j2
+    dest: /etc/ocemr/settings.py
+    owner: root
+    group: root
+  when: app_server
+  notify:
+    - Restart Apache2
+
+- meta: flush_handlers
+
+- name: Super User Exists?
+  shell: echo "from django.contrib.auth import get_user_model; User = get_user_model(); print(User.objects.filter(username='{{ ocemr.admin_name }}').count()>0)" | ocemr-manage shell
+  register: superuser_existed
+
+- name: Create Super User
+  shell: ocemr-manage createsuperuser --noinput --username={{ ocemr.admin_name }} --email={{ ocemr.admin_email }}
+  when: superuser_existed.stdout == "False"
+
+- name: Change Super User Password
+  expect:
+    command: ocemr-manage changepassword {{ ocemr.admin_name }}
+    responses:
+      (?i)password: "{{ ocemr.admin_pass }}"
+

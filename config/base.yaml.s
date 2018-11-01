@@ -1,0 +1,10 @@
+net_address: 192.168.1.2
+net_broadcast: 192.168.1.255
+net_dhcp: true
+net_domain: ocemr
+net_gateway: 192.168.1.1
+net_hostname: ocemr-server
+net_nameservers: 192.168.1.1
+net_netmask: 255.255.255.0
+net_network: 192.168.1.0
+timezone: UTC
